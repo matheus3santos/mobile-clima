@@ -4,9 +4,17 @@ import { SafeAreaView, StatusBar, StyleSheet, Text, View, Image, DropDownPicker,
 import { Header, Icon, Badge, SearchBar } from "react-native-elements";
 import { Menu, Provider } from 'react-native-paper';
 import { ListItem } from '@rneui/themed';
+import axios from 'axios';
+// import React, { useEffect, useState } from "react";
 
 
 
+// const [getData,setData] = React.useState([]);
+
+// useEffect(() => {
+//     async function climaDados() {
+//         const response = awiat axios('https://api.hgbrasil.com/weather')
+//     }
 
 
 const TemplateClima = () => {
@@ -42,7 +50,7 @@ const TemplateClima = () => {
                     
                 </Provider>
                 <View style={styles.image}>
-                    <Image source={require('../assets/cloud.png')} />
+                    <Image  style={{ width: 250, height: 250 }} source={require('../assets/conditions/rain.svg')} />
 
                 </View >
                 <View style={{ alignItems: 'center', margin: 10 }}>
@@ -122,7 +130,7 @@ const TemplateClima = () => {
             </View>
 
             <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'yellow', height: 180, paddingTop: 20 }}>
-                <ListItem>
+                <ListItem  style={{ width: 300, height: 15 }}>
                     <ListItem.Content>
                         <ListItem.Title>Inbox</ListItem.Title>
                     </ListItem.Content>
@@ -134,19 +142,6 @@ const TemplateClima = () => {
                         <ListItem.Title>Inbox</ListItem.Title>
                     </ListItem.Content>
 
-
-                </ListItem>
-                <ListItem style={{ height: 100 }}>
-                    <ListItem.Content>
-                        <ListItem.Title>Trash</ListItem.Title>
-                    </ListItem.Content>
-                    <Icon name="trash-can-outline" type="material-community" color="grey" />
-                    <ListItem.Content>
-                        <ListItem.Title>12°</ListItem.Title>
-                    </ListItem.Content>
-                    <ListItem.Content>
-                        <ListItem.Title>Trash</ListItem.Title>
-                    </ListItem.Content>
 
                 </ListItem>
             </View>
