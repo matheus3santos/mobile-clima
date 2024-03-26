@@ -19,40 +19,65 @@ import axios from 'axios';
 
 const TemplateClima = () => {
 
-    const [visible, setVisible] = React.useState(false);
 
-    const openMenu = () => setVisible(true);
+    // Função para buscar dados do clima da API
+    const searchCityWeather = async (city) => {
+        try {
+            const response = await axios.get(`https://api.hgbrasil.com/weather?key=SUA_CHAVE_API&city_name=${city}`);
+            console.log(response.data); // Aqui você pode manipular os dados recebidos da API
+            return response.data; // Retorna os dados para serem usados no componente
+        } catch (error) {
+            console.error('Erro ao buscar dados do clima:', error);
+            throw error; // Lança o erro para ser tratado fora da função
+        }
+    };
 
-    const closeMenu = () => setVisible(false);
+    const [city, setCity] = React.useState('');
+    const [weatherData, setWeatherData] = React.useState(null);
+
+    const handleSearch = async () => {
+        try {
+            const data = await searchCityWeather(city);
+            setWeatherData(data); // Atualiza o estado com os dados recebidos da API
+        } catch (error) {
+            // Trate o erro, se necessário
+        }
+    };
+
+
+
+
+
+    {/*Renderização da tela*/ }
 
     return (
         <View style={[styles.container, {
             flexDirection: "column"
         }]}>
             <View>
+
+                {/*barra de pesquisa*/}
                 <Provider>
                     <Header
-                        leftComponent={
+                        centerComponent={
                             <SearchBar
-                                placeholder="Type Here..."
-                                // onChangeText={updateSearch}
-                                // value={search}
+                                placeholder="Digite o nome da cidade"
+                                value={city}
+                                onChangeText={setCity}
+                                onSubmitEditing={handleSearch}
                             />
 
                         }
-                        rightComponent={
-                            <View>
-                                <Icon name='notifications' type='material' color='#000' />
-                                <Badge value="1" status="error" containerStyle={{ position: 'absolute', top: -4, right: -4 }} />
-                            </View>
-                        }
-                    />
-                    
-                </Provider>
-                <View style={styles.image}>
-                    <Image  style={{ width: 250, height: 250 }} source={require('../assets/conditions/rain.svg')} />
 
+                    />
+                </Provider>
+                {/*Imagem do clima da cidade*/}
+
+                <View style={styles.image}>
+                    <Image style={{ width: 250, height: 250 }} source={require('../assets/conditions/rain.svg')} />
                 </View >
+
+                {/*Temperatura atual*/}
                 <View style={{ alignItems: 'center', margin: 10 }}>
                     <Text style={{ fontSize: 40, margin: 10 }}>
                         25°C
@@ -67,13 +92,15 @@ const TemplateClima = () => {
                             <View style={{ alignItems: 'center', margin: 1, flexDirection: 'row' }}>
                                 <Text style={{ padding: 20, paddingTop: 0 }}>
                                     <Image style={{ width: 13, height: 13 }} source={require('../assets/favicon.png')} />
+                                {/*Temperatura minima do dia*/}
 
-                                    6%</Text>
+                                    6°</Text>
 
                                 <Text style={{ padding: 20, paddingTop: 0 }}>
                                     <Image style={{ width: 13, height: 13 }} source={require('../assets/favicon.png')} />
+                                {/*Temperatura maxima do dia*/}
 
-                                    6%</Text>
+                                    36°</Text>
                             </View>
                         </View>
                     </View>
@@ -81,7 +108,7 @@ const TemplateClima = () => {
 
             </View>
 
-            {/*Informações do clima*/}
+            {/*Informações do clima humidade, velocidade do vento,precipitação*/}
             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
 
                 <View style={[styles.climate]}>
@@ -104,33 +131,43 @@ const TemplateClima = () => {
             </View>
 
             {/*Previsão do tempo*/}
+            <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: "column", backgroundColor: 'blue', height: 200, paddingBottom: 10 }}>
 
-            <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: "row", backgroundColor: 'blue', height: 180, paddingBottom: 10 }}>
+                <View style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: "row", backgroundColor: 'blue', paddingBottom: 10 }}>
 
-                <View style={{ padding: 20, alignItems: "center", backgroundColor: '#4169E1', borderRadius: 10 }}>
-                    <Text>25°C</Text>
-                    <Image style={[styles.cloundImg]} source={require('../assets/cloud.png')} />
-                    <Text>15.00</Text>
+                    <Text style={{ padding: 10 }}> textinho</Text>
+
+                    <Text style={{ padding: 10 }}>textinho</Text>
                 </View>
-                <View style={{ padding: 20, alignItems: "center", backgroundColor: '#4169E1', borderRadius: 10 }}>
-                    <Text>25°C</Text>
-                    <Image style={[styles.cloundImg]} source={require('../assets/cloud.png')} />
-                    <Text>15.00</Text>
-                </View>
-                <View style={{ padding: 20, alignItems: "center", backgroundColor: '#4169E1', borderRadius: 10 }}>
-                    <Text>25°C</Text>
-                    <Image style={[styles.cloundImg]} source={require('../assets/cloud.png')} />
-                    <Text>15.00</Text>
-                </View>
-                <View style={{ padding: 20, alignItems: "center", backgroundColor: '#4169E1', borderRadius: 10 }}>
-                    <Text>25°C</Text>
-                    <Image style={[styles.cloundImg]} source={require('../assets/cloud.png')} />
-                    <Text>15.00</Text>
+                <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: "row", backgroundColor: 'blue', height: 140, paddingBottom: 10 }}>
+
+                    <View style={{ padding: 20, alignItems: "center", backgroundColor: '#4169E1', borderRadius: 10, margin: 5 }}>
+                        <Text>25°C</Text>
+                        <Image style={[styles.cloundImg]} source={require('../assets/cloud.png')} />
+                        <Text>15.00</Text>
+                    </View>
+                    <View style={{ padding: 20, alignItems: "center", backgroundColor: '#4169E1', borderRadius: 10, margin: 5 }}>
+                        <Text>25°C</Text>
+                        <Image style={[styles.cloundImg]} source={require('../assets/cloud.png')} />
+                        <Text>15.00</Text>
+                    </View>
+                    <View style={{ padding: 20, alignItems: "center", backgroundColor: '#4169E1', borderRadius: 10, margin: 5 }}>
+                        <Text>25°C</Text>
+                        <Image style={[styles.cloundImg]} source={require('../assets/cloud.png')} />
+                        <Text>15.00</Text>
+                    </View>
+                    <View style={{ padding: 20, alignItems: "center", backgroundColor: '#4169E1', borderRadius: 10, margin: 5 }}>
+                        <Text>25°C</Text>
+                        <Image style={[styles.cloundImg]} source={require('../assets/cloud.png')} />
+                        <Text>15.00</Text>
+                    </View>
                 </View>
             </View>
 
+
+            {/*Lista de previsão diaria*/}
             <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'yellow', height: 180, paddingTop: 20 }}>
-                <ListItem  style={{ width: 300, height: 15 }}>
+                <ListItem style={{ width: 300, height: 15 }}>
                     <ListItem.Content>
                         <ListItem.Title>Inbox</ListItem.Title>
                     </ListItem.Content>
