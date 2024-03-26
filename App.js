@@ -18,7 +18,8 @@ export default function App() {
         <AppStack.Screen
           name="TemplateClima"
           component={TemplateClima}
-          options={{ title: 'Template Clima' }}
+          options={{ title: 'Template Clima',headerShown:false }}
+          
         />
       </AppStack.Navigator>
     </NavigationContainer>
