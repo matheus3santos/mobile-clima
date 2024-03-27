@@ -5,48 +5,28 @@ import { Header, Icon, Badge, SearchBar } from "react-native-elements";
 import { Menu, Provider } from 'react-native-paper';
 import { ListItem } from '@rneui/themed';
 import axios from 'axios';
-// import React, { useEffect, useState } from "react";
 
 
 
-// const [getData,setData] = React.useState([]);
 
-// useEffect(() => {
-//     async function climaDados() {
-//         const response = awiat axios('https://api.hgbrasil.com/weather')
-//     }
 
 
 const TemplateClima = () => {
 
-
-    // Função para buscar dados do clima da API
-    const searchCityWeather = async (city) => {
-        try {
-            const response = await axios.get(`https://api.hgbrasil.com/weather?key=SUA_CHAVE_API&city_name=${city}`);
-            console.log(response.data); // Aqui você pode manipular os dados recebidos da API
-            return response.data; // Retorna os dados para serem usados no componente
-        } catch (error) {
-            console.error('Erro ao buscar dados do clima:', error);
-            throw error; // Lança o erro para ser tratado fora da função
-        }
-    };
-
-    const [city, setCity] = React.useState('');
     const [weatherData, setWeatherData] = React.useState(null);
 
-    const handleSearch = async () => {
-        try {
-            const data = await searchCityWeather(city);
-            setWeatherData(data); // Atualiza o estado com os dados recebidos da API
-        } catch (error) {
-            // Trate o erro, se necessário
-        }
-    };
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`https://api.hgbrasil.com/weather?key=d1d39801&city_name=${city}`);
+                setWeatherData(response.data);
+            } catch (error) {
+                console.error('Erro ao buscar dados do clima:', error);
+            }
+        };
 
-
-
-
+        fetchData(); // Chama a função para buscar os dados ao montar o componente
+    }, []);
 
     {/*Renderização da tela*/ }
 
@@ -63,10 +43,9 @@ const TemplateClima = () => {
                             <SearchBar
                                 placeholder="Digite o nome da cidade"
                                 value={city}
-                                onChangeText={setCity}
-                                onSubmitEditing={handleSearch}
+                                onChangeText={setCity} // Atualiza 'city' conforme o usuário digita
+                                onSubmitEditing={() => {}} // Implemente a função para lidar com a submissão da pesquisa
                             />
-
                         }
 
                     />
@@ -79,29 +58,18 @@ const TemplateClima = () => {
 
                 {/*Temperatura atual*/}
                 <View style={{ alignItems: 'center', margin: 10 }}>
-                    <Text style={{ fontSize: 40, margin: 10 }}>
-                        25°C
-                    </Text>
-                    <Text style={{ fontSize: 13, margin: 10 }}>
-                        Precipitações
-                    </Text>
-                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-
-                        <View style={[styles.climate2]}>
-
-                            <View style={{ alignItems: 'center', margin: 1, flexDirection: 'row' }}>
-                                <Text style={{ padding: 20, paddingTop: 0 }}>
-                                    <Image style={{ width: 13, height: 13 }} source={require('../assets/favicon.png')} />
-                                {/*Temperatura minima do dia*/}
-
-                                    6°</Text>
-
-                                <Text style={{ padding: 20, paddingTop: 0 }}>
-                                    <Image style={{ width: 13, height: 13 }} source={require('../assets/favicon.png')} />
-                                {/*Temperatura maxima do dia*/}
-
-                                    36°</Text>
-                            </View>
+                    <Text style={{ fontSize: 40, margin: 10 }}>{weatherData.main.temp}°C</Text>
+                    <Text style={{ fontSize: 13, margin: 10 }}>Precipitações</Text>
+                    <View style={[styles.climate2]}>
+                        <View style={{ alignItems: 'center', margin: 1, flexDirection: 'row' }}>
+                            <Text style={{ padding: 20, paddingTop: 0 }}>
+                                <Image style={{ width: 13, height: 13 }} source={require('../assets/favicon.png')} />
+                                {weatherData.main.temp_min}°
+                            </Text>
+                            <Text style={{ padding: 20, paddingTop: 0 }}>
+                                <Image style={{ width: 13, height: 13 }} source={require('../assets/favicon.png')} />
+                                {weatherData.main.temp_max}°
+                            </Text>
                         </View>
                     </View>
                 </View>
@@ -115,17 +83,18 @@ const TemplateClima = () => {
 
                     <View style={{ alignItems: 'center', margin: 10, flexDirection: 'row' }}>
                         <Text style={{ padding: 10 }}>
+
                             <Image style={{ width: 13, height: 13 }} source={require('../assets/favicon.png')} />
 
-                            6%</Text>
+                            rain</Text>
 
                         <Text style={{ padding: 10 }}><Image style={{ width: 13, height: 13 }} source={require('../assets/favicon.png')} />
 
-                            6%</Text>
+                            rain_probalility</Text>
 
                         <Text style={{ padding: 10 }}> <Image style={{ width: 13, height: 13 }} source={require('../assets/favicon.png')} />
 
-                            6%</Text>
+                            wind_speedy</Text>
                     </View>
                 </View>
             </View>
@@ -135,9 +104,9 @@ const TemplateClima = () => {
 
                 <View style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: "row", backgroundColor: 'blue', paddingBottom: 10 }}>
 
-                    <Text style={{ padding: 10 }}> textinho</Text>
+                    <Text style={{ padding: 10 }}>WeekeyDay</Text>
 
-                    <Text style={{ padding: 10 }}>textinho</Text>
+                    <Text style={{ padding: 10 }}>date</Text>
                 </View>
                 <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: "row", backgroundColor: 'blue', height: 140, paddingBottom: 10 }}>
 
@@ -165,23 +134,28 @@ const TemplateClima = () => {
             </View>
 
 
-            {/*Lista de previsão diaria*/}
-            <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'yellow', height: 180, paddingTop: 20 }}>
-                <ListItem style={{ width: 300, height: 15 }}>
-                    <ListItem.Content>
-                        <ListItem.Title>Inbox</ListItem.Title>
-                    </ListItem.Content>
-                    <Icon name="inbox" type="material-community" color="grey" />
-                    <ListItem.Content>
-                        <ListItem.Title>23°</ListItem.Title>
-                    </ListItem.Content>
-                    <ListItem.Content>
-                        <ListItem.Title>Inbox</ListItem.Title>
-                    </ListItem.Content>
 
+            {/*Lista de Forecast*/}
+            <View style={{ justifyContent: 'center', alignItems: 'center', height: 180, paddingTop: 20 }}>
+                <FlatList
+                    data={weatherForecast}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item }) => (
+                        <ListItem>
+                            <ListItem.Content>
 
-                </ListItem>
+                                <ListItem.Title>{item.date}</ListItem.Title>
+                                <ListItem.Subtitle>{item.weekday}</ListItem.Subtitle>
+                                <ListItem.Subtitle>Min: {item.min}° - Max: {item.max}°</ListItem.Subtitle>
+                            </ListItem.Content>
+                            <ListItem.Content>
+                                <ListItem.Title>{item.description}</ListItem.Title>
+                            </ListItem.Content>
+                        </ListItem>
+                    )}
+                />
             </View>
+
 
         </View >
     );
