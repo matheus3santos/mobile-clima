@@ -2,7 +2,7 @@
 import React from "react";
 import { SafeAreaView, StatusBar, StyleSheet, Text, View, Image, DropDownPicker, FlatList } from "react-native";
 import { Header, Icon, Badge, SearchBar } from "react-native-elements";
-import { Menu, Provider } from 'react-native-paper';
+import { Menu, Provider, TextInput } from 'react-native-paper';
 import { ListItem } from '@rneui/themed';
 import axios from 'axios';
 
@@ -13,20 +13,24 @@ import axios from 'axios';
 
 const TemplateClima = () => {
 
-    const [weatherData, setWeatherData] = React.useState(null);
+    const [city, setCity] = useState('Recife');
+    const [weatherData, setWeatherData] = useState(null);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(`https://api.hgbrasil.com/weather?key=d1d39801&city_name=${city}`);
-                setWeatherData(response.data);
-            } catch (error) {
-                console.error('Erro ao buscar dados do clima:', error);
-            }
-        };
+        if (city) {
+            fetchWeather(city);
+        }
+    }, [city]);
 
-        fetchData(); // Chama a função para buscar os dados ao montar o componente
-    }, []);
+    const fetchWeather = async (cityName) => {
+        try {
+            const response = await fetch(`https://api.hgbrasil.com/weather?format=json-cors&key=d1d39801&city_name=${city}`);
+            const data = await response.json();
+            setWeather(data);
+        } catch (error) {
+            console.error('Erro ao buscar previsão do tempo:', error);
+        }
+    };
 
     {/*Renderização da tela*/ }
 
@@ -40,11 +44,10 @@ const TemplateClima = () => {
                 <Provider>
                     <Header
                         centerComponent={
-                            <SearchBar
+                            <TextInput
                                 placeholder="Digite o nome da cidade"
-                                value={city}
-                                onChangeText={setCity} // Atualiza 'city' conforme o usuário digita
-                                onSubmitEditing={() => {}} // Implemente a função para lidar com a submissão da pesquisa
+                                // value={city}
+                                // onChangeText={text => setCity(text)} // Atualiza 'city' conforme o usuário digita
                             />
                         }
 
@@ -57,7 +60,7 @@ const TemplateClima = () => {
                 </View >
 
                 {/*Temperatura atual*/}
-                <View style={{ alignItems: 'center', margin: 10 }}>
+                {/* <View style={{ alignItems: 'center', margin: 10 }}>
                     <Text style={{ fontSize: 40, margin: 10 }}>{weatherData.main.temp}°C</Text>
                     <Text style={{ fontSize: 13, margin: 10 }}>Precipitações</Text>
                     <View style={[styles.climate2]}>
@@ -72,7 +75,7 @@ const TemplateClima = () => {
                             </Text>
                         </View>
                     </View>
-                </View>
+                </View> */}
 
             </View>
 
@@ -136,7 +139,7 @@ const TemplateClima = () => {
 
 
             {/*Lista de Forecast*/}
-            <View style={{ justifyContent: 'center', alignItems: 'center', height: 180, paddingTop: 20 }}>
+            {/* <View style={{ justifyContent: 'center', alignItems: 'center', height: 180, paddingTop: 20 }}>
                 <FlatList
                     data={weatherForecast}
                     keyExtractor={(item, index) => index.toString()}
@@ -154,7 +157,7 @@ const TemplateClima = () => {
                         </ListItem>
                     )}
                 />
-            </View>
+            </View> */}
 
 
         </View >
